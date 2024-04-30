@@ -25,7 +25,7 @@ object Stage {
   private[this] lazy val clearFullRow: GameState => GameState =
     (s0: GameState) => {
     def isFullRow(i: Int, s: GameState): Boolean =
-      (s.blocks filter {_.pos._2 == i} size) == s.gridSize._1
+      s.blocks.count(_.pos._2 == i) == s.gridSize._1
     @tailrec def tryRow(i: Int, s: GameState): GameState =
       if (i < 0) s 
       else if (isFullRow(i, s))

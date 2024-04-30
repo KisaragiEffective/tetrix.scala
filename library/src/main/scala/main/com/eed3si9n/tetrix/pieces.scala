@@ -37,9 +37,9 @@ case class GameState(blocks: Seq[Block], gridSize: (Int, Int),
     lineCounts: Seq[Int] = Seq(0, 0, 0, 0, 0),
     lastDeleted: Int = 0, pendingAttacks: Int = 0) {
   def lineCount: Int =
-    lineCounts.zipWithIndex map { case (n, i) => n * i } sum
+    lineCounts.zipWithIndex.map { case (n, i) => n * i }.sum
   def attackCount: Int =
-    lineCounts.drop(1).zipWithIndex map { case (n, i) => n * i } sum
+    lineCounts.drop(1).zipWithIndex.map { case (n, i) => n * i }.sum
   def view: GameView = GameView(blocks, gridSize,
     currentPiece.current, (4, 4), nextPiece.current,
     status, lineCount)

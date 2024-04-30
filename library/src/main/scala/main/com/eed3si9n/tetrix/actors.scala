@@ -40,11 +40,11 @@ class StageActor(stateActor: ActorRef) extends Actor {
     case Attack    => updateState {notifyAttack}
   }
   private[this] def opponent: ActorRef =
-    if (self.path.name == "stageActor1") context.actorFor("/user/stageActor2")
-    else context.actorFor("/user/stageActor1")
+    if (self.path.name == "stageActor1") context.actorOf(Props.empty, "stageActor2")
+    else context.actorOf(Props.empty, "stageActor1")
   private[this] def updateState(trans: GameState => GameState) {
-    val future = (stateActor ? GetState)(1 second).mapTo[GameState]
-    val s1 = Await.result(future, 1 second)
+    val future = (stateActor ? GetState)(1.second).mapTo[GameState]
+    val s1 = Await.result(future, 1.second)
     val s2 = trans(s1)
     stateActor ! SetState(s2)
     (0 to s2.lastDeleted - 2) foreach { i =>
@@ -93,8 +93,8 @@ class GameMasterActor(stateActor1: ActorRef, stateActor2: ActorRef,
     var s = getStatesAndJudge._2
     while (s.status == ActiveStatus) {
       val t0 = System.currentTimeMillis
-      val future = (agentActor ? BestMoves(getState2, config))(60 second)
-      Await.result(future, 60 second)
+      val future = (agentActor ? BestMoves(getState2, config))(60.second)
+      Await.result(future, 60.second)
       val t1 = System.currentTimeMillis
       if (t1 - t0 < config.minActionTime) Thread.sleep(config.minActionTime - (t1 - t0))
       s = getStatesAndJudge._2
@@ -114,11 +114,11 @@ class GameMasterActor(stateActor1: ActorRef, stateActor2: ActorRef,
     (s1, s2)
   }
   private[this] def getState1: GameState = {
-    val future = (stateActor1 ? GetState)(1 second).mapTo[GameState]
-    Await.result(future, 1 second)
+    val future = (stateActor1 ? GetState)(1.second).mapTo[GameState]
+    Await.result(future, 1.second)
   }
   private[this] def getState2: GameState = {
-    val future = (stateActor2 ? GetState)(1 second).mapTo[GameState]
-    Await.result(future, 1 second)
+    val future = (stateActor2 ? GetState)(1.second).mapTo[GameState]
+    Await.result(future, 1.second)
   }
 }

@@ -32,7 +32,7 @@ class Agent {
       if (vs.size < heights(k)) Some(coverupWeight * heights(k))
       else None
     }
-    math.sqrt((weightedHeights ++ crevasses ++ coverups) map { x => x * x } sum)
+    math.sqrt((weightedHeights ++ crevasses ++ coverups).map { x => x * x }.sum)
   }
   def bestMove(s0: GameState, maxThinkTime: Long): StageMessage =
     bestMoves(s0, maxThinkTime).headOption getOrElse {Tick}

@@ -1,13 +1,11 @@
-import android.Keys._
-
 lazy val buildSettings = Seq(
   version := "0.2.0-SNAPSHOT",
   organization := "com.eed3si9n",
   homepage := Some(url("http://eed3si9n.com")),
   licenses := Seq("MIT License" -> url("http://opensource.org/licenses/mit-license.php/")),
-  scalaVersion := "2.10.2",
+  scalaVersion := "2.13.13",
   scalacOptions := Seq("-deprecation", "-unchecked"),
-  initialCommands in console := """import com.eed3si9n.tetrix._
+  console / initialCommands := """import com.eed3si9n.tetrix._
                                   |import Stage._""".stripMargin,
   resolvers ++= Seq(
     Resolver.sonatypeRepo("public"),
@@ -15,14 +13,14 @@ lazy val buildSettings = Seq(
   )
 )
 
-lazy val specs2version = "2.2.2"
-lazy val akkaVersion = "2.2.1"
+lazy val specs2version = "4.20.5"
+lazy val akkaVersion = "2.8.5"
 lazy val libDeps = Def.setting { Seq(
-  "org.specs2" %% "specs2" % specs2version % "test",
+  "org.specs2" %% "specs2-core" % specs2version % "test",
   "com.typesafe.akka" %% "akka-actor" % akkaVersion
 )}
 lazy val swingDependencies = Def.setting {
-  "org.scala-lang" % "scala-swing" % scalaVersion.value
+  "org.scala-lang.modules" %% "scala-swing" % "3.0.0"
 }
 
 lazy val root = (project in file(".")).
@@ -42,18 +40,5 @@ lazy val swing = (project in file("swing")).
   settings(
     fork in run := true,
     libraryDependencies += swingDependencies.value
-  ).
-  dependsOn(library)
-
-lazy val droid = (project in file("android")).
-  settings(buildSettings: _*).
-  settings(androidBuild: _*).
-  settings(
-    name := "tetrix_droid",
-    platformTarget in Android := "android-16",
-    proguardOptions in Android ++= Seq("-dontwarn sun.misc.Unsafe",
-      """-keep class akka.** {
-        |  public <methods>;
-        |}""".stripMargin)
   ).
   dependsOn(library)

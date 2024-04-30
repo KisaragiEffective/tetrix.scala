@@ -51,5 +51,5 @@ object Scripter {
   }
   def generateScript: String =
     (Stage.randomStream(new util.Random) map {
-      _.toInt.toString} take {1000}) mkString
+      _.toInt.toString} take {1000}).mkString
 }

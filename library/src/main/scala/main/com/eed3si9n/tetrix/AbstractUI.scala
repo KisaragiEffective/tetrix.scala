@@ -8,7 +8,7 @@ class AbstractUI(config: Config) {
   import scala.concurrent._
   import scala.collection.immutable.Stream
   import ExecutionContext.Implicits.global
-  implicit val timeout = Timeout(100 millisecond)
+  implicit val timeout = Timeout(100.millisecond)
 
   private[this] val initialState = Stage.newState(Nil,
     (10, 23), Stage.randomStream(new scala.util.Random))
@@ -26,9 +26,9 @@ class AbstractUI(config: Config) {
   private[this] val masterActor = system.actorOf(Props(new GameMasterActor(
     stateActor1, stateActor2, agentActor, config: Config)), name = "masterActor")
   private[this] val tickTimer1 = system.scheduler.schedule(
-    0 millisecond, 701 millisecond, stageActor1, Tick)
+    0.millisecond, 701.millisecond, stageActor1, Tick)
   private[this] val tickTimer2 = system.scheduler.schedule(
-    0 millisecond, 701 millisecond, stageActor2, Tick)
+    0.millisecond, 701.millisecond, stageActor2, Tick)
   
   masterActor ! Start
 
